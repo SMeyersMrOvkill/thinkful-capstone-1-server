@@ -4,6 +4,9 @@ const BooksService = {
     },
     addBook(db, book) {
         return db.insert(book).into('books')
+    },
+    getBookById(db, id) {
+        return db.from('books').select('*').where('id', id);
     }
 };
 
