@@ -11,98 +11,39 @@ function makeDB() {
       });
 }
 
-describe('Books endpoints', () => {
+describe('All Services', () => {
     let db;
 
     before('make knex instance', () => {
-        console.log("Connecting to ", process.env.TEST_DB_URL)
         db = makeDB()
     })
 
-    //after('disconnect from db', () => db.destroy())
+    beforeEach('Seed database', async () => {
+        await db.into('users').insert(helpers.getUsersTestData());
+        await db.into('genres').insert(helpers.getGenresTestData());
+        await db.into('books').insert(helpers.getBooksTestData());
+    })
 
-    describe('User service', () => {
-        it('Inserts a user successfully', () => {
-            db = makeDB();
-            let users = helpers.getUsersTestData();
-            db.into('users').insert(users[0]).then(() => {
-                db.from('users').select('*').then(user => {
-                    expect(user[0].id).to.equal(1);
-                    db.destroy();
-                });
-            });
-        });
-    })
-    describe('Genre service', () => {
-        it('Inserts a genre successfully', () => {
-            db = makeDB();
-            let genres = helpers.getGenresTestData();
-            db.into('genres').insert(genres[0]).then(() => {
-                db.from('genres').select('*').then(genre => {
-                    expect(genre[0].id).to.equal(3)
-                    db.destroy();
-                })
-            })
-        })
-    })
-    describe('Book Service', () => {
-        it('Inserts a book successfully', () => {
-            db = makeDB();
-            let books = helpers.getBooksTestData();
-            db.into('books').insert(books[0]).then(() => {
-                db.from('books').select('*').then(book => {
-                    expect(book[0].id).to.equal(books[0].id);
-                    db.destroy();
-                });
-            });
-        });
+    afterEach('Truncate database', async() => {
+        await db.raw('truncate table books cascade');
+        await db.raw('truncate table genres cascade');
+        await db.raw('truncate table users cascade');
     });
-    describe('Cleanup', () => {
-        it('Removes all books successfully', () => {
-            db = knex({
-                client: 'pg',
-                connection: process.env.TEST_DB_URL,
-              });
-            db.raw('truncate table books cascade').then(() => {
-                db.select('*').from('books').then((books) => {
-                    expect(books.length).to.equal(0);
-                    db.destroy();
-                });
-            });
-        })
-        it('Removes all genres successfully', () => {
-            db = knex({
-                client: 'pg',
-                connection: process.env.TEST_DB_URL,
-              });
-            db.raw('truncate table genres cascade').then(() => {
-                db.select('*').from('genres').then((genres) => {
-                    expect(genres.length).to.equal(0);
-                    db.destroy();
-                })
-            });
-        })
-        it('Removes all users successfully', () => {
-            db = knex({
-                client: 'pg',
-                connection: process.env.TEST_DB_URL,
-              });
-            db.raw('truncate table users cascade').then(() => {
-                db.select('*').from('users').then((users) => {
-                    expect(users.length).to.equal(0);
-                    db.destroy();
-                })
-            });
-        })
-    })
-    /*
-    describe.only('Insert book', () => {
-        it('Should insert a book into the database', () => {
-            //db.
-            let book = {
 
-            }
-        })
+    after('disconnect from db', () => db.destroy())
+
+    it('Seeds the users successfully', async () => {
+        let user = await db.select('*').from('users').where('id', 1);
+        expect(user[0].id).to.equal(1);
     });
-    */
+
+    it('Seeds the genres successfully', async () => {
+        let genre = await db.select('*').from('genres').where('id', 3);
+        expect(genre[0].id).to.equal(3);
+    });
+
+    it('Seeds the books successfully', async () => {
+        let book = await db.select('*').from('books').where('id', 5);
+        expect(book[0].id).to.equal(5);
+    })
 });
