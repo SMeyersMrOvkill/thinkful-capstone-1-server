@@ -32,4 +32,9 @@ describe('Auth router', () => {
         .post('/api/auth/login')
         .expect(400)
     })
+    it('Requires user_name, full_name, and password', () => {
+        return supertest(app)
+        .post('/api/auth/register')
+        .expect(400)
+    })
 })

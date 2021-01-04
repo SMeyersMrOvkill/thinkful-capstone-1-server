@@ -1,6 +1,7 @@
 const express = require('express')
 const AuthService = require('./auth-service')
 const { requireAuth } = require('../middleware/jwt-auth')
+const bcrypt = require('bcryptjs');
 
 const authRouter = express.Router()
 const jsonBodyParser = express.json()
@@ -42,6 +43,33 @@ authRouter
       })
       .catch(next)
   })
+
+authRouter.post('/register', jsonBodyParser, (req, res, next) => {
+  const { user_name, full_name, password } = req.body
+  const newUser = {
+    user_name,
+    full_name,
+    password: !!password ? bcrypt.hashSync(password, bcrypt.genSaltSync()) : null
+  }
+  for (const [key, value] of Object.entries(newUser))
+    if (value == null)
+      return res.status(400).json({
+        status: -1,
+        message: `Missing '${key}' in request body`
+      })
+    console.log("Creating user", newUser);
+    AuthService.getUserWithUserName(
+      req.app.get('db'),
+      newUser.user_name
+    ).then((user) => {
+      if(user) {
+        return res.status(400).json({status: -1, message: "Username already registered"})
+      }
+      AuthService.createUser(req.app.get('db'), newUser).then(() => {
+        return res.status(200).json({status: 0, message: "Ok"})
+      })
+    })
+})
 
 authRouter.post('/refresh', requireAuth, (req, res) => {
   const sub = req.user.user_name

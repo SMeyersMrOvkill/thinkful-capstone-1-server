@@ -29,6 +29,9 @@ const AuthService = {
       .toString()
       .split(':')
   },
+  createUser(db, user) {
+    return db('users').insert(user);
+  }
 }
 
 module.exports = AuthService
