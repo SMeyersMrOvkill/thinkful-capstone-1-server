@@ -4,7 +4,7 @@ create table books (
     description TEXT NOT NULL,
     rating INTEGER NOT NULL,
     author TEXT NOT NULL,
-    genre INTEGER NOT NULL REFERENCES genres(id),
+    genre TEXT NOT NULL,
     date_created TIMESTAMPTZ DEFAULT now() NOT NULL,
     owner INTEGER REFERENCES users(id)
 )

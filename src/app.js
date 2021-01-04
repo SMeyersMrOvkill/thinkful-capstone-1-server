@@ -4,11 +4,11 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
+
 const booksRouter = require('./books/books-router');
 const authRouter = require('./auth/auth-router');
 
 const { NODE_ENV } = require('./config');
-const genresRouter = require('./genres/genres-router')
 
 const app = express();
 
@@ -21,7 +21,6 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/genres', genresRouter);
 app.use('/api/books', booksRouter);
 app.use('/api/auth', authRouter);
 
