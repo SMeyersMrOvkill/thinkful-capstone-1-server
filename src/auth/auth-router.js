@@ -56,8 +56,7 @@ authRouter.post('/register', jsonBodyParser, (req, res, next) => {
       return res.status(400).json({
         status: -1,
         message: `Missing '${key}' in request body`
-      })
-    console.log("Creating user", newUser);
+      });
     AuthService.getUserWithUserName(
       req.app.get('db'),
       newUser.user_name

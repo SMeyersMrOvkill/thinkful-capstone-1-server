@@ -69,11 +69,19 @@ function getAuthToken(user_id, user_name) {
     )
 }
 
+function seedUsers(db) {
+    return db('users').insert(getUsersTestData());
+}
 
+function seedBooks(db) {
+    return db('books').insert(getBooksTestData());
+}
 
 module.exports = {
     getUsersTestData,
     getBooksTestData,
     cleanTables,
-    getAuthToken
+    getAuthToken,
+    seedUsers,
+    seedBooks,
 }

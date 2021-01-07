@@ -8,7 +8,6 @@ booksRouter.route('/')
     .all(requireAuth)
     .get((req, res, next) => {
         BooksService.getAllBooksForUser(req.app.get('db'), req.user.id).then(books => {
-            console.log(books);
             res.json(books);
         })
     })
@@ -25,7 +24,6 @@ booksRouter.route('/create')
             genre,
             owner: req.user.id
         }
-        console.log(np);
         for (const [key, value] of Object.entries(np))
             if (value == null)
                 return res.json({
@@ -50,7 +48,6 @@ booksRouter.route('/update')
             genre,
             owner
         }
-        console.log(np);
         for (const [key, value] of Object.entries(np))
             if (value == null)
                 return res.json({
