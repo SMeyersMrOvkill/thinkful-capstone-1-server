@@ -24,9 +24,13 @@ The live app can be found [here](https://capstone1.vercel.app/books)
 
 ## Screenshots
 
-![home page](https://i.imgur.com/XAG7P01.png "Home Page")
+![home page](https://i.imgur.com/PYkSrKj.png "Home Page")
 
-![book list](https://i.imgur.com/gRYUGxu.png "Book List")
+![login](https://i.imgur.com/GyByO64.png "Login")
+
+![book list](https://i.imgur.com/25tEAvh.png "Book List")
+
+![edit](https://i.imgur.com/P6DfQoj.png "Edit Book")
 
 ## Summary
 
